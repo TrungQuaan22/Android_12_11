@@ -66,22 +66,29 @@ class StudentAdapter(
     val editName = dialogView.findViewById<EditText>(R.id.edit_student_name)
     val editId = dialogView.findViewById<EditText>(R.id.edit_student_id)
 
-    // Điền thông tin hiện tại của sinh viên
-    editName.setText(students[position].studentName)
-    editId.setText(students[position].studentId)
+    // Tạo bản sao tạm thời của sinh viên
+    val currentStudent = students[position]
+    editName.setText(currentStudent.studentName)
+    editId.setText(currentStudent.studentId)
 
     AlertDialog.Builder(context)
       .setTitle("Chỉnh sửa thông tin sinh viên")
       .setView(dialogView)
       .setPositiveButton("Lưu") { _, _ ->
-        // Cập nhật thông tin sinh viên trong danh sách
-        students[position].studentName = editName.text.toString()
-        students[position].studentId = editId.text.toString()
+        // Tạo đối tượng Student mới với thông tin đã chỉnh sửa
+        val updatedStudent = Student(
+          studentName = editName.text.toString(),
+          studentId = editId.text.toString()
+        )
+
+        // Ghi đè lên danh sách sinh viên
+        students[position] = updatedStudent
         notifyItemChanged(position)
       }
       .setNegativeButton("Hủy", null)
       .show()
   }
+
 
 
   class StudentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
